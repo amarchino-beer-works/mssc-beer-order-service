@@ -48,7 +48,8 @@ public class Customer extends BaseEntity {
 
     private String customerName;
 
-    @Column(length = 36, columnDefinition = "varchar")
+    @org.hibernate.annotations.Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar(36)")
     private UUID apiKey;
 
     @OneToMany(mappedBy = "customer")
