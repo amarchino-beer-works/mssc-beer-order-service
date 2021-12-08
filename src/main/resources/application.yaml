@@ -6,3 +6,7 @@ server:
 sfg:
   brewery:
     beer-service-host: http://localhost:8080
+spring:
+  artemis:
+    user: artemis
+    password: artemis
