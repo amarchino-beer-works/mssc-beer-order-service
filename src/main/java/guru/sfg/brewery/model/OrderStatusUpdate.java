@@ -15,27 +15,31 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package guru.sfg.beer.order.service.web.model;
-
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+package guru.sfg.brewery.model;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CustomerDto extends BaseItem {
+@SuperBuilder
+public class OrderStatusUpdate extends BaseItem {
 
-    @Builder
-    public CustomerDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, String name) {
+    public OrderStatusUpdate(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
+                             UUID orderId, String orderStatus, String customerRef) {
         super(id, version, createdDate, lastModifiedDate);
-        this.name = name;
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.customerRef = customerRef;
     }
 
-    private String name;
-
+    private UUID orderId;
+    private String customerRef;
+    private String orderStatus;
 }

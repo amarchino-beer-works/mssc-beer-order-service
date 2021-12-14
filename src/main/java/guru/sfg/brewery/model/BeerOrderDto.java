@@ -15,38 +15,36 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package guru.sfg.beer.order.service.web.model;
+package guru.sfg.brewery.model;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BeerOrderLineDto extends BaseItem {
+@SuperBuilder
+public class BeerOrderDto extends BaseItem {
 
-    @Builder
-    public BeerOrderLineDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
-                            String upc, String beerName, String beerStyle, UUID beerId, Integer orderQuantity, BigDecimal price) {
+    public BeerOrderDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, UUID customerId, List<BeerOrderLineDto> beerOrderLines,
+    		String orderStatus, String orderStatusCallbackUrl, String customerRef) {
         super(id, version, createdDate, lastModifiedDate);
-        this.upc = upc;
-        this.beerName = beerName;
-        this.beerStyle = beerStyle;
-        this.beerId = beerId;
-        this.orderQuantity = orderQuantity;
-        this.price = price;
+        this.customerId = customerId;
+        this.beerOrderLines = beerOrderLines;
+        this.orderStatus = orderStatus;
+        this.orderStatusCallbackUrl = orderStatusCallbackUrl;
+        this.customerRef = customerRef;
     }
 
-    private String upc;
-    private String beerName;
-    private String beerStyle;
-    private UUID beerId;
-    private Integer orderQuantity = 0;
-    private BigDecimal price;
+    private UUID customerId;
+    private String customerRef;
+    private List<BeerOrderLineDto> beerOrderLines;
+    private String orderStatus;
+    private String orderStatusCallbackUrl;
 }

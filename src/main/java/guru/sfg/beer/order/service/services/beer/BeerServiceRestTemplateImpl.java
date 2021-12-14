@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import guru.sfg.beer.order.service.web.model.BeerDto;
+import guru.sfg.brewery.model.BeerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 

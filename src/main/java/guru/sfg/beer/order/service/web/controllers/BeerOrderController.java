@@ -32,8 +32,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import guru.sfg.beer.order.service.services.BeerOrderService;
-import guru.sfg.beer.order.service.web.model.BeerOrderDto;
-import guru.sfg.beer.order.service.web.model.BeerOrderPagedList;
+import guru.sfg.brewery.model.BeerOrderDto;
+import guru.sfg.brewery.model.BeerOrderPagedList;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/api/v1/customers/{customerId}/")

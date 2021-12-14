@@ -15,21 +15,27 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package guru.sfg.beer.order.service.web.model;
+package guru.sfg.brewery.model;
 
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-public class BeerOrderPagedList extends PageImpl<BeerOrderDto> {
-	private static final long serialVersionUID = 1L;
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+public class CustomerDto extends BaseItem {
 
-	public BeerOrderPagedList(List<BeerOrderDto> content, Pageable pageable, long total) {
-        super(content, pageable, total);
+    public CustomerDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, String name) {
+        super(id, version, createdDate, lastModifiedDate);
+        this.name = name;
     }
 
-    public BeerOrderPagedList(List<BeerOrderDto> content) {
-        super(content);
-    }
+    private String name;
+
 }
