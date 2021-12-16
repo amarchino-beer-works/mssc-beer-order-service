@@ -15,6 +15,7 @@ import guru.sfg.beer.order.service.domain.BeerOrderEventEnum;
 import guru.sfg.beer.order.service.domain.BeerOrderStatusEnum;
 import guru.sfg.beer.order.service.repositories.BeerOrderRepository;
 import guru.sfg.beer.order.service.statemachine.BeerOrderStateChangeInterceptor;
+import guru.sfg.brewery.model.BeerOrderDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,6 +48,26 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 			sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.VALIDATION_FAILED);
 		}
 	}
+	
+	@Override
+	public void processAllocationPassed(BeerOrderDto beerOrderDto) {
+		BeerOrder beerOrder = beerOrderRepository.getById(beerOrderDto.getId());
+		sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_SUCCESS);
+		updateAllocatedQuantity(beerOrderDto, beerOrder);
+	}
+
+	@Override
+	public void processAllocationPendingInventory(BeerOrderDto beerOrderDto) {
+		BeerOrder beerOrder = beerOrderRepository.getById(beerOrderDto.getId());
+		sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_NO_INVENTORY);
+		updateAllocatedQuantity(beerOrderDto, beerOrder);
+	}
+
+	@Override
+	public void processAllocationFailed(BeerOrderDto beerOrderDto) {
+		BeerOrder beerOrder = beerOrderRepository.getById(beerOrderDto.getId());
+		sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.ALLOCATION_FAILED);
+	}
 
 	private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum event) {
 		StateMachine<BeerOrderStatusEnum, BeerOrderEventEnum> stateMachine = build(beerOrder);
@@ -66,6 +87,18 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 			});
 		stateMachine.start();
 		return stateMachine;
+	}
+	
+	private void updateAllocatedQuantity(BeerOrderDto beerOrderDto, BeerOrder beerOrder) {
+		BeerOrder allocatedOrder = beerOrderRepository.getById(beerOrderDto.getId());
+		allocatedOrder.getBeerOrderLines().forEach(beerOrderLine -> {
+			beerOrderDto.getBeerOrderLines().forEach(beerOrderLineDto -> {
+				if(beerOrderLine.getId().equals(beerOrderLineDto.getId())) {
+					beerOrderLine.setQuantityAllocated(beerOrderLineDto.getQuantityAllocated());
+				}
+			});
+		});
+		beerOrderRepository.save(beerOrder);
 	}
 
 }
