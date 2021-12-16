@@ -10,6 +10,7 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 
 import guru.sfg.beer.order.service.domain.BeerOrderEventEnum;
 import guru.sfg.beer.order.service.domain.BeerOrderStatusEnum;
+import guru.sfg.beer.order.service.statemachine.actions.AllocateOrderAction;
 import guru.sfg.beer.order.service.statemachine.actions.ValidateOrderAction;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEventEnum> {
 	
 	private final ValidateOrderAction validateOrderAction;
+	private final AllocateOrderAction allocateOrderAction;
 
 	@Override
 	public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {
@@ -40,7 +42,9 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
 			.and().withExternal()
 				.state(BeerOrderStatusEnum.VALIDATION_PENDING).target(BeerOrderStatusEnum.VALIDATED).event(BeerOrderEventEnum.VALIDATION_PASSED)
 			.and().withExternal()
-				.state(BeerOrderStatusEnum.VALIDATION_PENDING).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION).event(BeerOrderEventEnum.VALIDATION_FAILED);
+				.state(BeerOrderStatusEnum.VALIDATION_PENDING).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION).event(BeerOrderEventEnum.VALIDATION_FAILED)
+			.and().withExternal()
+				.state(BeerOrderStatusEnum.VALIDATED).target(BeerOrderStatusEnum.ALLOCATION_PENDING).event(BeerOrderEventEnum.ALLOCATE_ORDER).action(allocateOrderAction);
 	}
 	
 }
