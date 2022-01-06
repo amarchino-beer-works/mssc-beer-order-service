@@ -15,8 +15,8 @@ import lombok.Setter;
 @Component
 @RequiredArgsConstructor
 public class BeerServiceRestTemplateImpl implements BeerService {
-	private static final String BEER_PATH_V1 = "/api/v1/beer/{id}";
-	private static final String BEER_UPC_PATH_V1 = "/api/v1/beerUpc/{upc}";
+	public static final String BEER_PATH_V1 = "/api/v1/beer/{id}";
+	public static final String BEER_UPC_PATH_V1 = "/api/v1/beerUpc/{upc}";
 	private final RestTemplate restTemplate;
 	
 	@Setter
